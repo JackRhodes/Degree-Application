@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Degree_Application.Models;
 
 namespace Degree_Application
 {
@@ -22,6 +24,9 @@ namespace Degree_Application
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            services.AddDbContext<Degree_ApplicationContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("Degree_ApplicationContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
