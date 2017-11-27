@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Degree_Application.Models;
+using Degree_Application.Data;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace Degree_Application
 {
@@ -23,10 +26,17 @@ namespace Degree_Application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
 
             services.AddDbContext<Degree_ApplicationContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Degree_ApplicationContext")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<Degree_ApplicationContext>()
+                .AddDefaultTokenProviders();
+
+            //  services.AddTransient<UserManager<AccountModel>>();
+
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,7 +53,8 @@ namespace Degree_Application
             }
 
             app.UseStaticFiles();
-
+            //Enables login system
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

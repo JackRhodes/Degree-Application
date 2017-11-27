@@ -11,9 +11,10 @@ using System;
 namespace Degree_Application.Migrations
 {
     [DbContext(typeof(Degree_ApplicationContext))]
-    partial class Degree_ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20171127132204_Edited names")]
+    partial class Editednames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,6 +37,10 @@ namespace Degree_Application.Migrations
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(30);
 
                     b.Property<string>("PasswordHash");
 

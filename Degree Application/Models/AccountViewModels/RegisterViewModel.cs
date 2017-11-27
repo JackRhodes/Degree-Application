@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Degree_Application.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -37,9 +38,7 @@ namespace Degree_Application.Models.AccountViewModels
         [RegularExpression(@"([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})", ErrorMessage = "Invalid UK Postcode")]
         public string PostCode { get; set; }
 
-        [FileExtensions(Extensions ="jpg,png,gif")]
-        public string ProfilePicture { get; set; }
-
+        public IFileUpload ProfilePicture { get; set; }
 
     }
 }
