@@ -31,8 +31,12 @@ namespace Degree_Application.Controllers
 
         }
 
-        public IActionResult Login()
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Login(string returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
 
@@ -69,6 +73,26 @@ namespace Degree_Application.Controllers
             return View();
 
             
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (ModelState.IsValid)
+            {
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password,false,false);
+                if (result.Succeeded)
+                {
+                    RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+            }
+
+            return View();
         }
 
 
