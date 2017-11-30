@@ -30,7 +30,7 @@ namespace Degree_Application
             services.AddDbContext<Degree_ApplicationContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("Degree_ApplicationContext")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<AccountModel, IdentityRole>()
                 .AddEntityFrameworkStores<Degree_ApplicationContext>()
                 .AddDefaultTokenProviders();
 

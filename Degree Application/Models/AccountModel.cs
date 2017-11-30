@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Degree_Application.Models
 {
-    public class ApplicationUser :IdentityUser
+    public class AccountModel :IdentityUser
     {
         
-        //Uses all found within IdentityUser interface + the following@
+        //Uses all found within IdentityUser interface + the following:
 
         [Required]
         //[Phone]
@@ -22,8 +22,7 @@ namespace Degree_Application.Models
         [RegularExpression(@"([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})",ErrorMessage = "Invalid UK Postcode")]
         public string PostCode { get; set; }
 
-        [MaxLength(15)]
-        public byte[] ProfilePicture { get; set; }
+        public ImageModel ProfilePicture { get; set; }
 
        
     }

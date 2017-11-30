@@ -11,9 +11,10 @@ using System;
 namespace Degree_Application.Migrations
 {
     [DbContext(typeof(Degree_ApplicationContext))]
-    partial class Degree_ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20171130171644_Fixed Data types")]
+    partial class FixedDatatypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
