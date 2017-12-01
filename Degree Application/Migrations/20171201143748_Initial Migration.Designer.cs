@@ -11,8 +11,8 @@ using System;
 namespace Degree_Application.Migrations
 {
     [DbContext(typeof(Degree_ApplicationContext))]
-    [Migration("20171130171644_Fixed Data types")]
-    partial class FixedDatatypes
+    [Migration("20171201143748_Initial Migration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,7 +70,7 @@ namespace Degree_Application.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Image");
+                    b.Property<byte[]>("Image");
 
                     b.HasKey("Id");
 

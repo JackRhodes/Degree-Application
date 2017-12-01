@@ -9,6 +9,7 @@ using Degree_Application.Models.AccountViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
+using Degree_Application.Data;
 
 namespace Degree_Application.Controllers
 {
@@ -18,16 +19,17 @@ namespace Degree_Application.Controllers
     {
         private UserManager<AccountModel> _userManager;
         private SignInManager<AccountModel> _signInManager;
+        private Degree_ApplicationContext _dbContext;
 
         //Inbuilt .NET core namespace that allows for the creation and hashing
         //protected UserManager<AccountModel> _userManager = new UserManager<AccountModel>();
 
         public AccountController(UserManager<AccountModel> userManager,
-            SignInManager<AccountModel> signInManager)
+            SignInManager<AccountModel> signInManager, Degree_ApplicationContext dbcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-
+            _dbContext = dbcontext;
         }
 
         [HttpGet]
@@ -49,28 +51,37 @@ namespace Degree_Application.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, IFormFile image)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
 
             if (ModelState.IsValid)
             {
 
-                //Map values to an ApplicationUser object
-                AccountModel account = new AccountModel() { UserName = model.UserName, Email = model.Email, Mobile = model.Mobile, PostCode = model.PostCode };
-
-                //Wait for the account to be created
-                var result = await _userManager.CreateAsync(account, model.Password);
-
                 if (model.ProfilePicture != null)
                 {
 
-                    await ImageUpload(image);
+                    //Map values to an ApplicationUser object
+                    AccountModel account = new AccountModel() { UserName = model.UserName, Email = model.Email, Mobile = model.Mobile, PostCode = model.PostCode };
 
                     using (var memoryStream = new MemoryStream())
                     {
                         await model.ProfilePicture.CopyToAsync(memoryStream);
-                       // account.ProfilePicture = memoryStream.ToArray();
+                        // account.ProfilePicture = memoryStream.ToArray();
+
+                        ImageModel image = new ImageModel();
+
+                        image.Image = memoryStream.ToArray();
+
+                        _dbContext.Image.Add(image);
+
+                        account.ProfilePicture = image;
+                        
+                        await _dbContext.SaveChangesAsync();
+                        
                     }
+                    
+                    //Wait for the account to be created
+                    var result = await _userManager.CreateAsync(account, model.Password);
 
                 }
 

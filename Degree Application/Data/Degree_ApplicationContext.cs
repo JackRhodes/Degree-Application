@@ -11,12 +11,14 @@ namespace Degree_Application.Data
 {
     public class Degree_ApplicationContext : IdentityDbContext<AccountModel>
     {
+        
         public Degree_ApplicationContext(DbContextOptions<Degree_ApplicationContext> options)
             : base(options)
         {
         }
 
 
+        //Create database tables
         public DbSet<ItemModel> Items { get; set; }
 
         public DbSet<OrderModel> Order { get; set; }
@@ -27,9 +29,7 @@ namespace Degree_Application.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
-
-
+            
             base.OnModelCreating(builder);
             //Prevent unecessary fields in the database
             builder.Entity<AccountModel>()
@@ -43,6 +43,7 @@ namespace Degree_Application.Data
                 .Ignore(x => x.TwoFactorEnabled)
                 //Custom table name
                 .ToTable("Users");
+            
 
         }
     }

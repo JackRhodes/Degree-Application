@@ -69,7 +69,7 @@ namespace Degree_Application.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Image");
+                    b.Property<byte[]>("Image");
 
                     b.HasKey("Id");
 

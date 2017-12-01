@@ -10,7 +10,7 @@ namespace Degree_Application.Models
     {
         public int Id { get; set; }
 
-        [DataType(DataType.Upload)] 
-        public string Image { get; set; }
+        //[DataType(DataType.Upload)] 
+        public byte[] Image { get; set; }
     }
 }

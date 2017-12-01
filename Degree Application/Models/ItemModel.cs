@@ -28,5 +28,7 @@ namespace Degree_Application.Models
 
         public ImageModel Image { get; set; }
 
+        public AccountModel Account { get; set; }
+
     }
 }
