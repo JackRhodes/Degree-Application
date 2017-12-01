@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Degree_Application.Models.AccountViewModels
 {
-    public class EditAccountViewModel
+    public class EditViewModel
     {
         [Required]
         [EmailAddress]
@@ -33,6 +33,6 @@ namespace Degree_Application.Models.AccountViewModels
         [RegularExpression(@"([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z]))))\s?[0-9][A-Za-z]{2})", ErrorMessage = "Invalid UK Postcode")]
         public string PostCode { get; set; }
 
-        public IFormFile ProfilePicture { get; set; }
+       public IFormFile ProfilePicture { get; set; }
     }
 }

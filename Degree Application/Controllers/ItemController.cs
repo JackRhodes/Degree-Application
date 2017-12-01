@@ -7,8 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Degree_Application.Data;
 using Degree_Application.Models;
-using Microsoft.AspNetCore.Http;
-using static System.Net.WebRequestMethods;
+using Microsoft.AspNetCore.Identity;
 
 namespace Degree_Application.Controllers
 {
@@ -16,18 +15,26 @@ namespace Degree_Application.Controllers
     {
         private readonly Degree_ApplicationContext _context;
 
-        public ItemController(Degree_ApplicationContext context)
+        private readonly UserManager<AccountModel> _userManager;
+
+        private readonly SignInManager<AccountModel> _signInManager;
+
+        public ItemController(Degree_ApplicationContext context, UserManager<AccountModel> userManager,
+            SignInManager<AccountModel> signInManager)
         {
+
+            _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
         }
 
-        // GET: Item
+        // GET: ItemModels
         public async Task<IActionResult> Index()
         {
             return View(await _context.Items.ToListAsync());
         }
 
-        // GET: Item/Details/5
+        // GET: ItemModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,16 +52,13 @@ namespace Degree_Application.Controllers
             return View(itemModel);
         }
 
-        // GET: Item/Create
+        // GET: ItemModels/Create
         public IActionResult Create()
         {
-            if (User.Identity.IsAuthenticated)
-                return View();
-            else
-                return StatusCode(401);
+            return View();
         }
 
-        // POST: Item/Create
+        // POST: ItemModels/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -63,6 +67,9 @@ namespace Degree_Application.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                itemModel.AccountId = _userManager.GetUserId(User);
+
                 _context.Add(itemModel);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -70,7 +77,7 @@ namespace Degree_Application.Controllers
             return View(itemModel);
         }
 
-        // GET: Item/Edit/5
+        // GET: ItemModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,7 +93,7 @@ namespace Degree_Application.Controllers
             return View(itemModel);
         }
 
-        // POST: Item/Edit/5
+        // POST: ItemModels/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -121,7 +128,7 @@ namespace Degree_Application.Controllers
             return View(itemModel);
         }
 
-        // GET: Item/Delete/5
+        // GET: ItemModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,7 +146,7 @@ namespace Degree_Application.Controllers
             return View(itemModel);
         }
 
-        // POST: Item/Delete/5
+        // POST: ItemModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
