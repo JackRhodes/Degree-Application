@@ -28,12 +28,25 @@ namespace Degree_Application.Controllers
             _context = context;
         }
 
+
+        //[HttpGet("id")]
         // GET: ItemModels
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search)
         {
-            return View(await _context.Items.ToListAsync());
+            // Get everything in from the items table
+            var items = from x in _context.Items
+                        select x;
+            //If the Id being sent to the Id is not null, then filter.
+            if (!String.IsNullOrEmpty(search))
+            {
+                items = items.Where(x => x.Title.Contains(search));
+            }
+
+            return View("Index", await items.ToListAsync());
+
         }
 
+        [Route("{id}")]
         // GET: ItemModels/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -161,5 +174,7 @@ namespace Degree_Application.Controllers
         {
             return _context.Items.Any(e => e.Id == id);
         }
+        
+
     }
 }

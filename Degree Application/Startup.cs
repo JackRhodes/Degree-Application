@@ -60,6 +60,11 @@ namespace Degree_Application
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+                /*routes.MapRoute(
+                    name: "search",
+                    template: "{controller=Item}/{action=Search}/{search?}");*/
+
             });
         }
     }
