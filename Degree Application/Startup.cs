@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Degree_Application.Models;
 using Degree_Application.Data;
 using Microsoft.AspNetCore.Identity;
-
+using Degree_Application.Data.Repositories;
 
 namespace Degree_Application
 {
@@ -33,6 +33,13 @@ namespace Degree_Application
             services.AddIdentity<AccountModel, IdentityRole>()
                 .AddEntityFrameworkStores<Degree_ApplicationContext>()
                 .AddDefaultTokenProviders();
+
+            Func<IServiceProvider, IItemRepository> supplier = serviceProvider => new ItemRepository(serviceProvider.GetService<Degree_ApplicationContext>());
+            services.AddTransient(supplier);
+
+
+
+
 
             //  services.AddTransient<UserManager<AccountModel>>();
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Degree_Application.Data;
 using Degree_Application.Models;
 using Microsoft.AspNetCore.Identity;
+using Degree_Application.Data.Repositories;
 
 namespace Degree_Application.Controllers
 {
@@ -19,13 +20,17 @@ namespace Degree_Application.Controllers
 
         private readonly SignInManager<AccountModel> _signInManager;
 
+        private IItemRepository _itemRepository;
+
         public ItemController(Degree_ApplicationContext context, UserManager<AccountModel> userManager,
-            SignInManager<AccountModel> signInManager)
+            SignInManager<AccountModel> signInManager, IItemRepository itemRepository)
         {
 
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
+
+            _itemRepository = itemRepository;
         }
 
 
@@ -33,17 +38,7 @@ namespace Degree_Application.Controllers
         // GET: ItemModels
         public async Task<IActionResult> Index(string search)
         {
-            // Get everything in from the items table
-            var items = from x in _context.Items
-                        select x;
-            //If the Id being sent to the Id is not null, then filter.
-            if (!String.IsNullOrEmpty(search))
-            {
-                items = items.Where(x => x.Title.Contains(search));
-            }
-
-            return View("Index", await items.ToListAsync());
-
+            return View("Index", await _itemRepository.FuzzySearchTitle(search));
         }
 
         [Route("{id}")]
@@ -55,14 +50,15 @@ namespace Degree_Application.Controllers
                 return NotFound();
             }
 
-            var itemModel = await _context.Items
-                .SingleOrDefaultAsync(m => m.Id == id);
-            if (itemModel == null)
+            ItemModel item = await _itemRepository.GetItemById(id);
+
+            if (item == null)
             {
                 return NotFound();
             }
 
-            return View(itemModel);
+
+            return View(item);
         }
 
         // GET: ItemModels/Create
