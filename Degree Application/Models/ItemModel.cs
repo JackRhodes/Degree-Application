@@ -12,7 +12,7 @@ namespace Degree_Application.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "Please enter 50 characters or less"), MinLength(3)]
+        [StringLength(50, ErrorMessage = "Please enter 50 characters or less"), MinLength(1)]
         public string Title { get; set; }
 
         [Required]
@@ -28,6 +28,7 @@ namespace Degree_Application.Models
 
         public ImageModel Image { get; set; }
 
+        [Required]
         public string AccountId { get; set; }
 
     }

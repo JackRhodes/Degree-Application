@@ -21,8 +21,6 @@ namespace Degree_Application.Data
         //Create database tables
         public DbSet<ItemModel> Items { get; set; }
 
-        public DbSet<OrderModel> Order { get; set; }
-
         public DbSet<ImageModel> Image { get; set; }
 
         // public DbSet<Degree_Application.Models.ApplicationUser> AccountModel { get; set; }

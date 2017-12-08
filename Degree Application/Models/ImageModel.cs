@@ -8,9 +8,10 @@ namespace Degree_Application.Models
 {
     public class ImageModel
     {
+        [Required]
         public int Id { get; set; }
-
-        //[DataType(DataType.Upload)] 
+        
+        [Required] 
         public byte[] Image { get; set; }
     }
 }
