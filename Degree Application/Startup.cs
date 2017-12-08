@@ -34,12 +34,8 @@ namespace Degree_Application
                 .AddEntityFrameworkStores<Degree_ApplicationContext>()
                 .AddDefaultTokenProviders();
 
-            Func<IServiceProvider, IItemRepository> supplier = serviceProvider => new ItemRepository(serviceProvider.GetService<Degree_ApplicationContext>());
+            Func<IServiceProvider, IItemRepository> supplier = serviceProvider => new ItemRepository(serviceProvider.GetService<Degree_ApplicationContext>(), serviceProvider.GetService<UserManager<AccountModel>>());
             services.AddTransient(supplier);
-
-
-
-
 
             //  services.AddTransient<UserManager<AccountModel>>();
 

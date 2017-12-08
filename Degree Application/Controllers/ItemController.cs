@@ -9,27 +9,17 @@ using Degree_Application.Data;
 using Degree_Application.Models;
 using Microsoft.AspNetCore.Identity;
 using Degree_Application.Data.Repositories;
+using Microsoft.AspNetCore.Http;
 
 namespace Degree_Application.Controllers
 {
     public class ItemController : Controller
     {
-        private readonly Degree_ApplicationContext _context;
-
-        private readonly UserManager<AccountModel> _userManager;
-
-        private readonly SignInManager<AccountModel> _signInManager;
-
+        
         private IItemRepository _itemRepository;
 
-        public ItemController(Degree_ApplicationContext context, UserManager<AccountModel> userManager,
-            SignInManager<AccountModel> signInManager, IItemRepository itemRepository)
+        public ItemController(IItemRepository itemRepository)
         {
-
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _context = context;
-
             _itemRepository = itemRepository;
         }
 
@@ -38,7 +28,7 @@ namespace Degree_Application.Controllers
         // GET: ItemModels
         public async Task<IActionResult> Index(string search)
         {
-            return View("Index", await _itemRepository.FuzzySearchTitle(search));
+            return View("Index", await _itemRepository.FuzzySearchTitleAsync(search));
         }
 
         [Route("{id}")]
@@ -50,13 +40,12 @@ namespace Degree_Application.Controllers
                 return NotFound();
             }
 
-            ItemModel item = await _itemRepository.GetItemById(id);
+            ItemModel item = await _itemRepository.GetItemByIdAsync(id);
 
             if (item == null)
             {
                 return NotFound();
             }
-
 
             return View(item);
         }
@@ -76,11 +65,12 @@ namespace Degree_Application.Controllers
         {
             if (ModelState.IsValid)
             {
+             
+                //Get the HttpContext from the Post.
+                HttpContext httpContext = HttpContext;
 
-                itemModel.AccountId = _userManager.GetUserId(User);
+                await _itemRepository.CreateItemAsync(itemModel, httpContext);
 
-                _context.Add(itemModel);
-                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(itemModel);
@@ -94,7 +84,8 @@ namespace Degree_Application.Controllers
                 return NotFound();
             }
 
-            var itemModel = await _context.Items.SingleOrDefaultAsync(m => m.Id == id);
+            var itemModel = await _itemRepository.GetSingleItemByIdAsync(id);
+
             if (itemModel == null)
             {
                 return NotFound();
@@ -118,8 +109,7 @@ namespace Degree_Application.Controllers
             {
                 try
                 {
-                    _context.Update(itemModel);
-                    await _context.SaveChangesAsync();
+                    await _itemRepository.UpdateItemAsync(itemModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -145,8 +135,8 @@ namespace Degree_Application.Controllers
                 return NotFound();
             }
 
-            var itemModel = await _context.Items
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var itemModel = await _itemRepository.GetSingleItemByIdAsync(id);
+                
             if (itemModel == null)
             {
                 return NotFound();
@@ -160,17 +150,15 @@ namespace Degree_Application.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var itemModel = await _context.Items.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Items.Remove(itemModel);
-            await _context.SaveChangesAsync();
+            ItemModel itemModel = await _itemRepository.GetSingleItemByIdAsync(id);
+            await _itemRepository.DeleteItemAsync(itemModel);
             return RedirectToAction(nameof(Index));
         }
 
         private bool ItemModelExists(int id)
         {
-            return _context.Items.Any(e => e.Id == id);
+            return _itemRepository.CheckIfItemExists(id);
         }
         
-
     }
 }
