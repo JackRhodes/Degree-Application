@@ -10,25 +10,59 @@ using Degree_Application.Models;
 using Microsoft.AspNetCore.Identity;
 using Degree_Application.Data.Repositories;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace Degree_Application.Controllers
 {
     public class ItemController : Controller
     {
-        
-        private IItemRepository _itemRepository;
 
-        public ItemController(IItemRepository itemRepository)
+        private IItemRepository _itemRepository;
+        private SignInManager<AccountModel> _signInManager;
+
+        public ItemController(IItemRepository itemRepository, SignInManager<AccountModel> signInManager)
         {
             _itemRepository = itemRepository;
+            _signInManager = signInManager;
+
         }
 
-
         //[HttpGet("id")]
+        [Route("Item")]
+        [Route("Item/Index")]
         // GET: ItemModels
-        public async Task<IActionResult> Index(string search)
+        public async Task<IActionResult> Index(string search, string sortOrder)
         {
-            return View("Index", await _itemRepository.FuzzySearchTitleAsync(search));
+
+            //This controller was influenced by: https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/sort-filter-page
+
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "item_desc" : "";
+            //Swap Date and Date 
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            
+            var result = await _itemRepository.FuzzySearchTitleAsync(search);
+            
+            //Create IEnumerable to enable iteration through the results ordered list. This saves database calls.
+            IOrderedEnumerable<ItemModel> itemList;
+
+            switch (sortOrder)
+            {
+                case "item_desc":
+                    itemList = result.OrderByDescending(s => s.Title);
+                    break;
+                case "Date":
+                    itemList = result.OrderBy(s => s.DatePosted);
+                    break;
+                case "date_desc":
+                    itemList = result.OrderByDescending(s => s.DatePosted);
+                    break;
+                default:
+                    itemList = result.OrderBy(s => s.DatePosted);
+                    break;
+            }
+
+            //Convert back to a list to enable the view to output.
+            return View("Index", itemList.ToList());
         }
 
         [Route("{id}")]
@@ -53,7 +87,10 @@ namespace Degree_Application.Controllers
         // GET: ItemModels/Create
         public IActionResult Create()
         {
-            return View();
+            if (User.Identity.IsAuthenticated)
+                return View();
+
+            return RedirectToAction("Login", "Account");
         }
 
         // POST: ItemModels/Create
@@ -65,7 +102,7 @@ namespace Degree_Application.Controllers
         {
             if (ModelState.IsValid)
             {
-             
+                itemModel.DatePosted = DateTime.Now;
                 //Get the HttpContext from the Post.
                 HttpContext httpContext = HttpContext;
 
@@ -136,7 +173,7 @@ namespace Degree_Application.Controllers
             }
 
             var itemModel = await _itemRepository.GetSingleItemByIdAsync(id);
-                
+
             if (itemModel == null)
             {
                 return NotFound();
@@ -159,6 +196,6 @@ namespace Degree_Application.Controllers
         {
             return _itemRepository.CheckIfItemExists(id);
         }
-        
+
     }
 }

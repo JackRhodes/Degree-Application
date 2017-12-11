@@ -53,6 +53,5 @@ namespace Degree_Application.Data.Repositories
         /// <param name="id">Id of Item.</param>
         /// <returns>Boolean value.</returns>
         bool CheckIfItemExists(int id);
-        
     }
 }

@@ -75,13 +75,20 @@ namespace Degree_Application.Controllers
                         _dbContext.Image.Add(image);
 
                         account.ProfilePicture = image;
-                        
+
                         await _dbContext.SaveChangesAsync();
-                        
+
                     }
-                    
+
                     //Wait for the account to be created
                     var result = await _userManager.CreateAsync(account, model.Password);
+
+                    if (result.Succeeded)
+                    {
+                        await _signInManager.SignInAsync(account, isPersistent: false);
+
+                        return RedirectToAction("Index", "Home");
+                    }
 
                 }
 
@@ -103,7 +110,7 @@ namespace Degree_Application.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                    RedirectToAction(nameof(HomeController.Index), "Home");
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

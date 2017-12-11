@@ -24,12 +24,17 @@ namespace Degree_Application.Models
         public decimal Price { get; set; }
             
         [Required]
+        [Range(1,2, ErrorMessage = "Value not within range")]
         public int Status { get; set; }
 
         public ImageModel Image { get; set; }
 
-        [Required]
+       // [Required]
         public string AccountId { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime DatePosted { get; set; }
 
     }
 }

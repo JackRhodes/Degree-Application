@@ -14,8 +14,6 @@ namespace Degree_Application.Data.Repositories
     {
         private Degree_ApplicationContext _context;
         private readonly UserManager<AccountModel> _userManager;
-        private Degree_ApplicationContext degree_ApplicationContext;
-
         public ItemRepository(Degree_ApplicationContext context, UserManager<AccountModel> userManager)
         {
             _context = context;

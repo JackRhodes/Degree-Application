@@ -10,6 +10,9 @@ namespace Degree_Application.Models.AccountViewModels
     public class EditViewModel
     {
         [Required]
+        public string Id { get; set; }
+        
+        [Required]
         [EmailAddress]
         public string Email { get; set; }
 
