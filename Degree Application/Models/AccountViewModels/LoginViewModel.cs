@@ -17,4 +17,5 @@ namespace Degree_Application.Models.AccountViewModels
         public string Password { get; set; }
         
     }
+
 }

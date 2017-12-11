@@ -9,7 +9,6 @@ namespace Degree_Application.Models
 {
     public class AccountModel :IdentityUser
     {
-        
         //Uses all found within IdentityUser interface + the following:
 
         [Required]
@@ -23,7 +22,5 @@ namespace Degree_Application.Models
         public string PostCode { get; set; }
 
         public ImageModel ProfilePicture { get; set; }  
-
-       
     }
 }

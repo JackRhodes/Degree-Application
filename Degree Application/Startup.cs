@@ -58,12 +58,12 @@ namespace Degree_Application
             app.UseStaticFiles();
             //Enables login system
             app.UseAuthentication();
-            
+
             //app.UseMvc(routes =>
             // {
             //     routes.MapRoute(
             //         name: "default",
-            //         template: "{controller=Home}/{action=Index}/{id?}");
+            //         template: "{controller=Item}/{action=Index}/{id?}");
 
             //     /*routes.MapRoute(
             //         name: "search",
@@ -71,8 +71,8 @@ namespace Degree_Application
 
             // });
 
-            //Application uses default routing therefore above is not required.
-            app.UseMvcWithDefaultRoute();
+             //Application uses default routing therefore above is not required.
+             app.UseMvcWithDefaultRoute();
 
         }
     }

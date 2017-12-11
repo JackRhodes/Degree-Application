@@ -12,6 +12,7 @@ namespace Degree_Application.Controllers
     {
         public IActionResult Index()
         {
+            //<img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" />
             return View();
         }
 

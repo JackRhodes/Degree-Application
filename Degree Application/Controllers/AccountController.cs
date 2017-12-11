@@ -34,6 +34,8 @@ namespace Degree_Application.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [Route("Account")]
+        [Route("Account/Login")]
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -105,8 +107,7 @@ namespace Degree_Application.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true. This will need implementing.
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
@@ -128,10 +129,7 @@ namespace Degree_Application.Controllers
             {
                 await image.CopyToAsync(stream);
             }
-
-            // process uploaded files
-            // Don't rely on or trust the FileName property without validation.
-
+            
             return Ok(new { filePath });
         }
     }
