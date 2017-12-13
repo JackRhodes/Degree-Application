@@ -1,4 +1,5 @@
-﻿using Degree_Application.Models;
+﻿using Degree_Application.Data;
+using Degree_Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,33 @@ namespace Degree_Application_Test.Models
     [TestClass]
     public class ItemModelTest
     {
+        private static AccountModel accountModel = new AccountModel()
+        {
+            Id = "a86e0ca9-8803-4c98-86db-f0e617649b96",
+            Email = "jack@jack.co.uk",
+            Mobile = "+447479946354",
+            NormalizedEmail = "JACK@JACK.CO.UK",
+            NormalizedUserName = "TESTUSER1",
+            PasswordHash = "AQAAAAEAACcQAAAAEFQ7HMuLtXegAj0h +U3lp21+EEOUue8rM8vooVZwaIvwcKrJm/PImItwY8cm7UzzQw==",
+            PostCode = "bn15 0pd",
+            ProfilePicture = image,
+            SecurityStamp = "dfcaf703-80f4-4e9f-9365-629f00db8748",
+            UserName = "testuser1"
+        };
+
         private ItemModel validItemModel = new ItemModel()
         {
             //The Id is a GUID
-            AccountId = "4fbb9ba5-c458-4c30-8afb-ef6495f483b4",
+            Account = accountModel,
             Description = "Test Description",
             Title = "Test item 1",
             Price = 2.99m,
-            Status = 1
+            Status = CustomData.StatusEnum.New
+        };
 
+        private static ImageModel image = new ImageModel()
+        {
+            Id = 1
         };
 
         private ModelHelper modelHelper = new ModelHelper();
@@ -47,7 +66,7 @@ namespace Degree_Application_Test.Models
             //Assign;
             ItemModel itemModel = validItemModel;
 
-            itemModel.AccountId = null;
+            itemModel.Account = null;
 
             //Act
             bool valid = modelHelper.CheckModelValidation(itemModel);
@@ -59,7 +78,6 @@ namespace Degree_Application_Test.Models
         [TestMethod]
         public void Item_ShouldValidate_WhenTitleWithinCharacterLimit()
         {
-
             //Assign;
             ItemModel itemModel = validItemModel;
 
@@ -76,13 +94,11 @@ namespace Degree_Application_Test.Models
             bool valid = modelHelper.CheckModelValidation(itemModel);
             //Assert
             Assert.AreEqual(true, valid);
-
         }
 
         [TestMethod]
         public void Item_ShouldNotValidate_WhenTitleOverCharacterLimit()
         {
-
             //Assign;
             ItemModel itemModel = validItemModel;
 
@@ -99,7 +115,6 @@ namespace Degree_Application_Test.Models
             bool valid = modelHelper.CheckModelValidation(itemModel);
             //Assert
             Assert.AreEqual(false, valid);
-
         }
 
         [TestMethod]
@@ -113,7 +128,6 @@ namespace Degree_Application_Test.Models
             bool valid = modelHelper.CheckModelValidation(itemModel);
             //Assert
             Assert.AreEqual(false, valid);
-
         }
 
 
@@ -139,7 +153,6 @@ namespace Degree_Application_Test.Models
             bool valid = modelHelper.CheckModelValidation(itemModel);
             //Assert
             Assert.AreEqual(true, valid);
-
         }
 
         [TestMethod]
@@ -162,7 +175,6 @@ namespace Degree_Application_Test.Models
             bool valid = modelHelper.CheckModelValidation(itemModel);
             //Assert
             Assert.AreEqual(false, valid);
-
         }
 
         [TestMethod]

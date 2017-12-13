@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
+    <None Include="Models\AccountModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Models\AccountModel.cs" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

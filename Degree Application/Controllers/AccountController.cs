@@ -34,8 +34,6 @@ namespace Degree_Application.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("Account")]
-        [Route("Account/Login")]
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -89,7 +87,7 @@ namespace Degree_Application.Controllers
                     {
                         await _signInManager.SignInAsync(account, isPersistent: false);
 
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Item");
                     }
 
                 }
@@ -111,7 +109,7 @@ namespace Degree_Application.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Item");
                 }
             }
 

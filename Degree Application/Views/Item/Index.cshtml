@@ -36,6 +36,17 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">  @Html.DisplayNameFor(model => model.DatePosted)</a>
             </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Account.UserName)
+            </th>
+
+            <th>
+
+                @Html.DisplayNameFor(model => model.Account.PostCode)
+
+            </th>
+
         </tr>
     </thead>
     <tbody>
@@ -43,7 +54,7 @@
             {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    <a asp-action="Details" asp-route-id="@item.Id">  @Html.DisplayFor(modelItem => item.Title)</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
@@ -59,16 +70,24 @@
                 </td>
 
                 <td>
-                    <div class="btn-group btn-group-sm">
+                    @Html.DisplayFor(modelItem => item.Account.UserName)
+                </td>
 
+                <td>
+                    @Html.DisplayFor(modelItem => item.Account.PostCode)
+                </td>
+
+                <td>
+                    <div class="btn-group btn-group-sm">
                         <div class="btn-group btn-group-sm">
                             <a asp-action="Edit" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Edit</a>
                         </div>
                         <div class="btn-group btn-group-sm">
                             <a asp-action="Details" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Details</a>
                         </div>
+
                         <div class="btn-group btn-group-sm">
-                            <a asp-action="Delete" class="btn btn-sm btn-danger"  asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Delete" class="btn btn-sm btn-danger" asp-route-id="@item.Id">Delete</a>
                         </div>
 
                     </div>

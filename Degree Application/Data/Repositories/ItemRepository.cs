@@ -45,7 +45,10 @@ namespace Degree_Application.Data.Repositories
 
         public async Task<int> CreateItemAsync(ItemModel itemModel, HttpContext httpcontext)
         {
-            itemModel.AccountId = _userManager.GetUserId(httpcontext.User);
+            //Potential security risk via Http spoofing?
+            AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(httpcontext.User));
+            
+            itemModel.Account = account;
 
             _context.Add(itemModel); 
 

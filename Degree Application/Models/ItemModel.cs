@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using static Degree_Application.Data.CustomData;
 
 namespace Degree_Application.Models
 {
@@ -24,17 +25,23 @@ namespace Degree_Application.Models
         public decimal Price { get; set; }
             
         [Required]
-        [Range(1,2, ErrorMessage = "Value not within range")]
-        public int Status { get; set; }
+        public StatusEnum Status { get; set; }
 
         public ImageModel Image { get; set; }
 
        // [Required]
-        public string AccountId { get; set; }
+        public AccountModel Account { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         public DateTime DatePosted { get; set; }
 
+        /*
+        public enum StatusEnum
+        {
+            Used,
+            New
+        }
+        */
     }
 }

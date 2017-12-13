@@ -11,8 +11,8 @@ using System;
 namespace Degree_Application.Migrations
 {
     [DbContext(typeof(Degree_ApplicationContext))]
-    [Migration("20171208124335_Adds New Data")]
-    partial class AddsNewData
+    [Migration("20171212150025_Initial Migration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,8 +83,7 @@ namespace Degree_Application.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AccountId")
-                        .IsRequired();
+                    b.Property<string>("AccountIdId");
 
                     b.Property<DateTime>("DatePosted");
 
@@ -96,14 +95,15 @@ namespace Degree_Application.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<int>("Status")
-                        .HasMaxLength(2);
+                    b.Property<int>("Status");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountIdId");
 
                     b.HasIndex("ImageId");
 
@@ -227,6 +227,10 @@ namespace Degree_Application.Migrations
 
             modelBuilder.Entity("Degree_Application.Models.ItemModel", b =>
                 {
+                    b.HasOne("Degree_Application.Models.AccountModel", "AccountId")
+                        .WithMany()
+                        .HasForeignKey("AccountIdId");
+
                     b.HasOne("Degree_Application.Models.ImageModel", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");

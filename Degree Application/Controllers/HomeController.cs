@@ -13,24 +13,10 @@ namespace Degree_Application.Controllers
         public IActionResult Index()
         {
             //<img src="data:image;base64,@System.Convert.ToBase64String(Model.Image)" />
-            return View();
+            return RedirectToAction("Index", "Item");
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult Error()
+            public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

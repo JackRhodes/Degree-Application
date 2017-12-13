@@ -16,7 +16,7 @@ namespace Degree_Application.Controllers
 {
     public class ItemController : Controller
     {
-
+        //Outsource all database actions to the repository.
         private IItemRepository _itemRepository;
         private SignInManager<AccountModel> _signInManager;
 
@@ -44,7 +44,7 @@ namespace Degree_Application.Controllers
             
             //Create IEnumerable to enable iteration through the results ordered list. This saves database calls.
             IOrderedEnumerable<ItemModel> itemList;
-
+            
             switch (sortOrder)
             {
                 case "item_desc":
@@ -102,6 +102,7 @@ namespace Degree_Application.Controllers
         {
             if (ModelState.IsValid)
             {
+                //Set the date posted to the servers date time.
                 itemModel.DatePosted = DateTime.Now;
                 //Get the HttpContext from the Post.
                 HttpContext httpContext = HttpContext;
@@ -178,7 +179,7 @@ namespace Degree_Application.Controllers
             {
                 return NotFound();
             }
-
+            
             return View(itemModel);
         }
 

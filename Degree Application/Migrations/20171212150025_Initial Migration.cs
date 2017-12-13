@@ -29,7 +29,7 @@ namespace Degree_Application.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Image = table.Column<byte[]>(nullable: true)
+                    Image = table.Column<byte[]>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,29 +55,6 @@ namespace Degree_Application.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Items",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(maxLength: 255, nullable: false),
-                    ImageId = table.Column<int>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    Status = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(maxLength: 255, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Items", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Items_Image_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Image",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,27 +169,32 @@ namespace Degree_Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
+                name: "Items",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AccountId = table.Column<string>(nullable: true),
-                    ItemId = table.Column<int>(nullable: true)
+                    AccountIdId = table.Column<string>(nullable: true),
+                    DatePosted = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(maxLength: 255, nullable: false),
+                    ImageId = table.Column<int>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    Status = table.Column<int>(nullable: false),
+                    Title = table.Column<string>(maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Order_Users_AccountId",
-                        column: x => x.AccountId,
+                        name: "FK_Items_Users_AccountIdId",
+                        column: x => x.AccountIdId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Order_Items_ItemId",
-                        column: x => x.ItemId,
-                        principalTable: "Items",
+                        name: "FK_Items_Image_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Image",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -245,19 +227,14 @@ namespace Degree_Application.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_AccountIdId",
+                table: "Items",
+                column: "AccountIdId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_ImageId",
                 table: "Items",
                 column: "ImageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_AccountId",
-                table: "Order",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Order_ItemId",
-                table: "Order",
-                column: "ItemId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -295,16 +272,13 @@ namespace Degree_Application.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Order");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Image");

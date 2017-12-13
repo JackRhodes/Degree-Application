@@ -82,8 +82,7 @@ namespace Degree_Application.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AccountId")
-                        .IsRequired();
+                    b.Property<string>("AccountId");
 
                     b.Property<DateTime>("DatePosted");
 
@@ -95,14 +94,15 @@ namespace Degree_Application.Migrations
 
                     b.Property<decimal>("Price");
 
-                    b.Property<int>("Status")
-                        .HasMaxLength(2);
+                    b.Property<int>("Status");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("ImageId");
 
@@ -226,6 +226,10 @@ namespace Degree_Application.Migrations
 
             modelBuilder.Entity("Degree_Application.Models.ItemModel", b =>
                 {
+                    b.HasOne("Degree_Application.Models.AccountModel", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
                     b.HasOne("Degree_Application.Models.ImageModel", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");

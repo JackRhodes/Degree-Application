@@ -11,8 +11,8 @@ using System;
 namespace Degree_Application.Migrations
 {
     [DbContext(typeof(Degree_ApplicationContext))]
-    [Migration("20171201143748_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20171212150851_Fixes ItemId database column for account")]
+    partial class FixesItemIddatabasecolumnforaccount
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,7 +70,8 @@ namespace Degree_Application.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<byte[]>("Image");
+                    b.Property<byte[]>("Image")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
@@ -81,6 +82,10 @@ namespace Degree_Application.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("AccountId");
+
+                    b.Property<DateTime>("DatePosted");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -94,31 +99,15 @@ namespace Degree_Application.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(255);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("Degree_Application.Models.OrderModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AccountId");
-
-                    b.Property<int?>("ItemId");
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ImageId");
 
-                    b.ToTable("Order");
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -238,20 +227,13 @@ namespace Degree_Application.Migrations
 
             modelBuilder.Entity("Degree_Application.Models.ItemModel", b =>
                 {
-                    b.HasOne("Degree_Application.Models.ImageModel", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
-                });
-
-            modelBuilder.Entity("Degree_Application.Models.OrderModel", b =>
-                {
                     b.HasOne("Degree_Application.Models.AccountModel", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId");
 
-                    b.HasOne("Degree_Application.Models.ItemModel", "Item")
+                    b.HasOne("Degree_Application.Models.ImageModel", "Image")
                         .WithMany()
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ImageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
