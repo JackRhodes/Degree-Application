@@ -13,5 +13,11 @@ namespace Degree_Application.Data
             New = 2
         }
 
+        public enum SaleStatus
+        {
+            New = 1,
+            Sold = 2
+        }
+
     }
 }

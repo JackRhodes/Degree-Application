@@ -90,11 +90,21 @@ namespace Degree_Application.Controllers
                         return RedirectToAction("Index", "Item");
                     }
 
+                    else
+                    {
+
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
+
+                    }
+
                 }
 
             }
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -110,6 +120,12 @@ namespace Degree_Application.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Item");
+                }
+
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return View(model);
                 }
             }
 
@@ -130,5 +146,13 @@ namespace Degree_Application.Controllers
             
             return Ok(new { filePath });
         }
+
+        public async Task<IActionResult> Logout ()
+        {
+            await _signInManager.SignOutAsync();
+
+            return RedirectToAction("Index", "Item");
+        }
+
     }
 }

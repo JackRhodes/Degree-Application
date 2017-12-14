@@ -27,6 +27,9 @@ namespace Degree_Application.Models
         [Required]
         public StatusEnum Status { get; set; }
 
+        //[Required]
+        //public SaleStatus SaleStatus { get; set; }
+
         public ImageModel Image { get; set; }
 
        // [Required]
@@ -35,13 +38,6 @@ namespace Degree_Application.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime DatePosted { get; set; }
-
-        /*
-        public enum StatusEnum
-        {
-            Used,
-            New
-        }
-        */
+        
     }
 }

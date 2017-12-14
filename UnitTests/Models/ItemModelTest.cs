@@ -129,10 +129,7 @@ namespace Degree_Application_Test.Models
             //Assert
             Assert.AreEqual(false, valid);
         }
-
-
-
-
+        
         [TestMethod]
         public void Item_ShouldValidate_WhenDescriptionWithinCharacterLimit()
         {

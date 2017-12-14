@@ -2,7 +2,11 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
+
+
+
 <h2>Index</h2>
 <p>
     <a asp-action="Create" class="btn btn-primary">Create New</a>
@@ -52,6 +56,8 @@
     <tbody>
         @foreach (var item in Model)
             {
+
+
             <tr>
                 <td>
                     <a asp-action="Details" asp-route-id="@item.Id">  @Html.DisplayFor(modelItem => item.Title)</a>
@@ -79,16 +85,23 @@
 
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <div class="btn-group btn-group-sm">
-                            <a asp-action="Edit" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Edit</a>
-                        </div>
+
+                        @if (User.Identity.Name == item.Account.UserName)
+                        {
+                            <div class="btn-group btn-group-sm">
+                                <a asp-action="Edit" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Edit</a>
+                            </div>
+                        }
+
                         <div class="btn-group btn-group-sm">
                             <a asp-action="Details" class="btn btn-sm btn-primary" asp-route-id="@item.Id">Details</a>
                         </div>
-
-                        <div class="btn-group btn-group-sm">
-                            <a asp-action="Delete" class="btn btn-sm btn-danger" asp-route-id="@item.Id">Delete</a>
-                        </div>
+                        @if (User.Identity.Name == item.Account.UserName)
+                        {
+                            <div class="btn-group btn-group-sm">
+                                <a asp-action="Delete" class="btn btn-sm btn-danger" asp-route-id="@item.Id">Delete</a>
+                            </div>
+                        }
 
                     </div>
                 </td>

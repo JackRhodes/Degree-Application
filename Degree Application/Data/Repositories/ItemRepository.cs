@@ -23,12 +23,13 @@ namespace Degree_Application.Data.Repositories
         public async Task<List<ItemModel>> FuzzySearchTitleAsync(string searchParam)
         {
             // Get everything in from the items table
-            var items = from x in _context.Items
+            var items = from x in _context.Items.AsNoTracking().Include(_ => _.Account)
                         select x;
             //If the Id being sent to the Id is not null, then filter.
             if (!String.IsNullOrEmpty(searchParam))
             {
                 items = items.Where(x => x.Title.Contains(searchParam));
+                
             }
 
             return await items.ToListAsync();
@@ -43,10 +44,10 @@ namespace Degree_Application.Data.Repositories
             return itemModel;
         }
 
-        public async Task<int> CreateItemAsync(ItemModel itemModel, HttpContext httpcontext)
+        public async Task<int> CreateItemAsync(ItemModel itemModel, HttpContext httpContext)
         {
             //Potential security risk via Http spoofing?
-            AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(httpcontext.User));
+            AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(httpContext.User));
             
             itemModel.Account = account;
 
@@ -77,6 +78,18 @@ namespace Degree_Application.Data.Repositories
         public bool CheckIfItemExists(int id)
         {
             return _context.Items.Any(e => e.Id == id);
+        }
+
+        public Task<List<ItemModel>> GetAllItemFromUser(HttpContext httpContext)
+        {
+
+            AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(httpContext.User));
+
+            var items = from x in _context.Items.AsNoTracking().Include(_ => _.Account)
+                        select x;
+
+            return items.Where(x => x.Account == account).ToListAsync();
+
         }
     }
 }

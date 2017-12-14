@@ -37,7 +37,7 @@ namespace Degree_Application.Data.Repositories
         /// <param name="itemModel">The item to be added.</param>
         /// <param name="httpcontext">The request sent with the creation.</param>
         /// <returns>Success status/</returns>
-        Task<int> CreateItemAsync(ItemModel itemModel, HttpContext httpcontext);
+        Task<int> CreateItemAsync(ItemModel itemModel, HttpContext httpContext);
         /// <summary>
         /// Updates an existing record in the item datasource.
         /// </summary>
@@ -56,5 +56,8 @@ namespace Degree_Application.Data.Repositories
         /// <param name="id">Id of Item.</param>
         /// <returns>Boolean value.</returns>
         bool CheckIfItemExists(int id);
+
+        Task<List<ItemModel>> GetAllItemFromUser(HttpContext httpContext);
+
     }
 }

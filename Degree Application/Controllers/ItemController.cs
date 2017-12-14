@@ -39,7 +39,10 @@ namespace Degree_Application.Controllers
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "item_desc" : "";
             //Swap Date and Date 
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            
+
+            ViewData["MyItems"] = !String.IsNullOrEmpty(sortOrder);
+
+
             var result = await _itemRepository.FuzzySearchTitleAsync(search);
             
             //Create IEnumerable to enable iteration through the results ordered list. This saves database calls.
@@ -63,6 +66,13 @@ namespace Degree_Application.Controllers
 
             //Convert back to a list to enable the view to output.
             return View("Index", itemList.ToList());
+        }
+        
+
+        public async Task<IActionResult> MyItems()
+        {
+            
+            return View("Index", await _itemRepository.GetAllItemFromUser(HttpContext));
         }
 
         [Route("{id}")]
@@ -189,6 +199,7 @@ namespace Degree_Application.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             ItemModel itemModel = await _itemRepository.GetSingleItemByIdAsync(id);
+            
             await _itemRepository.DeleteItemAsync(itemModel);
             return RedirectToAction(nameof(Index));
         }
