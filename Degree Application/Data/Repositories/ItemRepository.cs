@@ -82,13 +82,13 @@ namespace Degree_Application.Data.Repositories
 
         public Task<List<ItemModel>> GetAllItemFromUser(HttpContext httpContext)
         {
-
+           
             AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(httpContext.User));
 
             var items = from x in _context.Items.AsNoTracking().Include(_ => _.Account)
                         select x;
 
-            return items.Where(x => x.Account == account).ToListAsync();
+            return items.Where(x => x.Account.Id == account.Id).ToListAsync();
 
         }
     }

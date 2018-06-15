@@ -19,7 +19,7 @@ namespace Degree_Application.Controllers
     {
         private UserManager<AccountModel> _userManager;
         private SignInManager<AccountModel> _signInManager;
-        private Degree_ApplicationContext _dbContext;
+        private Degree_ApplicationContext _context;
 
         //Inbuilt .NET core namespace that allows for the creation and hashing
         //protected UserManager<AccountModel> _userManager = new UserManager<AccountModel>();
@@ -29,7 +29,7 @@ namespace Degree_Application.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _dbContext = dbcontext;
+            _context = dbcontext;
         }
 
         [HttpGet]
@@ -48,6 +48,30 @@ namespace Degree_Application.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            AccountModel account = _context.Users.FirstOrDefault(x => x.Id == _userManager.GetUserId(HttpContext.User));
+            return View(account);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(AccountModel model)
+        {
+            if (ModelState.IsValid)
+            {
+               var account =  _context.Users.FirstOrDefault(x => x.Id == model.Id);
+
+                account.Mobile = model.Mobile;
+                account.PostCode = model.PostCode;
+
+                _context.SaveChangesAsync();
+
+            }
+            
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -57,11 +81,12 @@ namespace Degree_Application.Controllers
             if (ModelState.IsValid)
             {
 
+                //Map values to an ApplicationUser object
+                AccountModel account = new AccountModel() { UserName = model.UserName, Email = model.Email, Mobile = model.Mobile, PostCode = model.PostCode };
+
                 if (model.ProfilePicture != null)
                 {
 
-                    //Map values to an ApplicationUser object
-                    AccountModel account = new AccountModel() { UserName = model.UserName, Email = model.Email, Mobile = model.Mobile, PostCode = model.PostCode };
 
                     using (var memoryStream = new MemoryStream())
                     {
@@ -72,32 +97,32 @@ namespace Degree_Application.Controllers
 
                         image.Image = memoryStream.ToArray();
 
-                        _dbContext.Image.Add(image);
+                        _context.Image.Add(image);
 
                         account.ProfilePicture = image;
 
-                        await _dbContext.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
 
                     }
 
-                    //Wait for the account to be created
-                    var result = await _userManager.CreateAsync(account, model.Password);
+                }
 
-                    if (result.Succeeded)
+                //Wait for the account to be created
+                var result = await _userManager.CreateAsync(account, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(account, isPersistent: false);
+
+                    return RedirectToAction("Index", "Item");
+                }
+
+                else
+                {
+
+                    foreach (var error in result.Errors)
                     {
-                        await _signInManager.SignInAsync(account, isPersistent: false);
-
-                        return RedirectToAction("Index", "Item");
-                    }
-
-                    else
-                    {
-
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
 
                 }
@@ -143,11 +168,11 @@ namespace Degree_Application.Controllers
             {
                 await image.CopyToAsync(stream);
             }
-            
+
             return Ok(new { filePath });
         }
 
-        public async Task<IActionResult> Logout ()
+        public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
 

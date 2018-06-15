@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Degree_Application.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Degree_Application.Controllers
 {
@@ -71,7 +72,6 @@ namespace Degree_Application.Controllers
 
         public async Task<IActionResult> MyItems()
         {
-            
             return View("Index", await _itemRepository.GetAllItemFromUser(HttpContext));
         }
 
@@ -176,6 +176,7 @@ namespace Degree_Application.Controllers
         }
 
         // GET: ItemModels/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
